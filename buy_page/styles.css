@@ -1,0 +1,139 @@
+/* Categories Section */
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1a1a1d;
+  }
+  
+  .logo {
+    font-size: 24px;
+    color: #f39c12;
+    font-weight: 600;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+  }
+  
+  .nav-links li {
+    margin-left: 20px;
+  }
+  
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    color: #f39c12;
+  }
+  
+  .hamburger {
+    display: none;
+    color: white;
+    font-size: 24px;
+  }
+.categories {
+    padding: 40px;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.categories h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.category-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.category-list a {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.category-list a:hover {
+    background-color: #0056b3;
+}
+
+/* Products Section */
+.products {
+    padding: 60px 40px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.products h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.product-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    transition: transform 0.3s ease;
+}
+
+.product-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.product-card h3 {
+    font-size: 22px;
+    margin: 20px 0 10px;
+}
+
+.product-card p {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.product-btn {
+    background-color:#34495e;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+/* Footer Section */
+footer {
+    padding: 20px;
+    background-color:#1a1a1d;
+    color: white;
+    text-align: center;
+}

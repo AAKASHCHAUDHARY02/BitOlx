@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Product - BitOlx</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/sell_page/css/sell.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>BitOlx</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/buy_page/buy.html">Buy</a></li>
+                <li><a href="/sell_page/sell.html">Sell</a></li>
+                <li><a href="/login_page/login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sell Form Section -->
+    <section class="sell-section">
+        <div class="sell-container">
+            <h2>Sell Your Product</h2>
+            <p>Fill out the form below to list your product for sale.</p>
+            <form id="sellForm">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" placeholder="Enter Product Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category">
+                        <option value="books">Books</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-price">Price</label>
+                    <input type="number" id="product-price" placeholder="Enter Price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" placeholder="Describe the product" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-image">Upload Image</label>
+                    <input type="file" id="product-image" accept="image/*">
+                </div>
+
+                <button type="submit" class="btn-sell">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 BitOlx. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

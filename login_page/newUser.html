@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BitOlx - SignUp</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="../login_page/login1.css" />
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  </head>
+
+  <body background="background.jpg">
+    <form id="signup-form">
+      <img class="logo" src="../login_page/logo.png" alt="Company Logo" />
+      <h1>BitOlx</h1>
+
+      <label for="name">Name:</label>
+      <input type="text" placeholder="Enter Name" id="name" required />
+      <div id="errorname"></div>
+
+      <label for="email">Email Address:</label>
+      <input type="email" placeholder="Enter Email" id="email" required />
+      <div id="erroremail"></div>
+
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        placeholder="Enter Password"
+        id="password"
+        required
+      />
+      <div id="errorpass"></div>
+
+      <label for="confirm-password">Confirm Password:</label>
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        id="confirm-password"
+        required
+      />
+      <div id="errorconfirmpass"></div>
+
+      <button type="submit" id="signup-btn">Sign Up</button>
+    </form>
+
+    <script type="module">
+      // Import the functions you need from the Firebase SDKs
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+      import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBC_QGtasFWeXqR6HWFExxHoG33VVj0nnA",
+        authDomain: "bitolx-eb2f5.firebaseapp.com",
+        projectId: "bitolx-eb2f5",
+        storageBucket: "bitolx-eb2f5.appspot.com",
+        messagingSenderId: "709510627062",
+        appId: "1:709510627062:web:d6790183c7154a5bd8b6d7",
+        measurementId: "G-HGQFGLTCTY",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Handle form submission for signup
+      const signupForm = document.getElementById("signup-form");
+
+      signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirm-password").value;
+        const name = document.getElementById("name").value;
+
+        // Validate the passwords match
+        if (password !== confirmPassword) {
+          document.getElementById("errorconfirmpass").innerText =
+            "Passwords do not match!";
+          return;
+        }
+
+        // Firebase signup
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed up successfully
+            const user = userCredential.user;
+            alert("Signup successful! Welcome, " + name);
+
+            // Update the user's display name
+            updateProfile(user, {
+              displayName: name,
+            })
+              .then(() => {
+                console.log("Name added to user profile.");
+              })
+              .catch((error) => {
+                console.error("Error updating user profile:", error);
+              });
+
+            // Redirect to login page or dashboard
+            window.location.href = "login.html";
+          })
+          .catch((error) => {
+            // Handle Errors here
+            const errorMessage = error.message;
+            document.getElementById("erroremail").innerText = errorMessage;
+          });
+      });
+    </script>
+  </body>
+</html>

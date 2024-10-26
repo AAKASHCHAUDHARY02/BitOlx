@@ -1,0 +1,178 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f1f3f6;
+    color: #333;
+    height: 100%;
+    margin: 0;
+}
+
+/* Container to hold sidebar and main content */
+.container {
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: fixed; /* Sidebar is fixed to the left */
+    top: 0;
+    bottom: 0; /* Full height */
+}
+
+.sidebar-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #ecf0f1;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.sidebar-links li {
+    margin-bottom: 20px;
+}
+
+.sidebar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-links a.active,
+.sidebar-links a:hover {
+    background-color: #34495e;
+}
+
+/* Main Content */
+main {
+    margin-left: 250px; 
+    padding: 40px;
+    background-color: #f1f3f6;
+    flex-grow: 1;
+}
+
+/* Welcome Section */
+.welcome {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.welcome h2 {
+    font-size: 32px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.welcome p {
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+/* Cards Section */
+.admin-cards {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background-color: #fff;
+    padding: 30px;
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.card i {
+    font-size: 50px;
+    color: #f39c12;
+    margin-bottom: 20px;
+}
+
+/* Optional if using images instead of icons */
+.card-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.card .btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto; 
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    main {
+        margin-left: 200px;
+        padding: 20px;
+    }
+
+    .admin-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+    }
+}

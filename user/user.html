@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | BitOlx</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/user/dash.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>User Dashboard</h2>
+            </div>
+            <ul class="sidebar-links">
+                <li><a href="/user/user.html" class="active">Dashboard</a></li>
+                <li><a href="/buy_page/buy.html">Buy Page</a></li>
+                <li><a href="/sell_page/sell.html">Sell Page</a></li>
+                <li><a href="/index.html" id="logout-btn">Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <section class="welcome">
+                <h2>Welcome to your Dashboard</h2>
+                <p>Here you can manage your account, buy and sell items, and log out.</p>
+            </section>
+        
+            <section class="admin-cards">
+                <!-- Buy Items Card -->
+                <div class="card">
+                    <i class="fas fa-shopping-cart"></i> <!-- Font Awesome Icon -->
+                    <!-- Or you can use an image instead -->
+                    <!-- <img src="/path-to-your-buy-image.jpg" alt="Buy" class="card-img"> -->
+                    <h3>Buy Items</h3>
+                    <a href="/buy_page/buy.html" class="btn">Go to Buy Page</a>
+                </div>
+        
+                <!-- Sell Items Card -->
+                <div class="card">
+                    <i class="fas fa-dollar-sign"></i> <!-- Font Awesome Icon -->
+                    <!-- Or you can use an image instead -->
+                    <!-- <img src="/path-to-your-sell-image.jpg" alt="Sell" class="card-img"> -->
+                    <h3>Sell Items</h3>
+                    <a href="/sell_page/sell.html" class="btn">Go to Sell Page</a>
+                </div>
+        
+                <!-- Logout Card -->
+                <div class="card">
+                    <i class="fas fa-sign-out-alt"></i> <!-- Font Awesome Icon -->
+                    <!-- Or you can use an image instead -->
+                    <!-- <img src="/path-to-your-logout-image.jpg" alt="Logout" class="card-img"> -->
+                    <h3>Logout</h3>
+                    <button id="logout-card-btn" class="btn">Logout</button>
+                </div>
+            </section>
+        </main>        
+    </div>
+
+    <footer>
+        <p>&copy; 2024 BitOlx. User Dashboard.</p>
+    </footer>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
+
+    <script>
+        // Firebase config and initialization
+        const firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+            projectId: "YOUR_FIREBASE_PROJECT_ID",
+            storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+            appId: "YOUR_FIREBASE_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Handle Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                alert("Logged out successfully!");
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Error logging out: ", error);
+            });
+        });
+
+        document.getElementById('logout-card-btn').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                alert("Logged out successfully!");
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Error logging out: ", error);
+            });
+        });
+    </script>
+</body>
+
+</html>
