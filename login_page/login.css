@@ -47,9 +47,12 @@ nav ul li a {
 }
 
 body {
+    overflow: hidden;
+    max-height: 100vh;
     background-image: url('/images/home2.jpg');
     background-color: #080710;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .background {

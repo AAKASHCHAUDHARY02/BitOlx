@@ -18,14 +18,17 @@
             </div>
             <ul class="sidebar-links">
                 <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                <li><a href="manage_users.html">Manage Users</a></li>
-                <li><a href="analytics.html">Analytics</a></li>
+                <!-- <li><a href="manage_users.html">Manage Users</a></li> -->
+                <li><a href="/buy_page/buy.html">Buy</a></li>
+                <li><a href="/sell_page/sell.html">Sell</a></li>
+                <!-- <li><a href="analytics.html">Analytics</a></li> -->
                 <li><a href="logout.html">Logout</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Stats Section -->
             <section class="stats-section">
                 <div class="stat-card">
                     <h3>Total Products</h3>
@@ -33,7 +36,7 @@
                 </div>
                 <div class="stat-card">
                     <h3>Total Users</h3>
-                    <p id="total-users">0</p>
+                    <p id="total-users"></p>
                 </div>
                 <div class="stat-card">
                     <h3>Total Sales</h3>
@@ -41,9 +44,10 @@
                 </div>
             </section>
 
-            <section class="manage-section">
-                <h2>Manage Products</h2>
-                <table id="product-table">
+            <!-- Buy Section -->
+            <section id="buy-section" class="manage-section">
+                <h2>Manage Buy Products</h2>
+                <table id="buy-product-table">
                     <thead>
                         <tr>
                             <th>Product Name</th>
@@ -53,8 +57,27 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="product-list">
-                        <!-- Products will be dynamically populated here -->
+                    <tbody id="buy-product-list">
+                        <!-- Buy products will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Sell Section -->
+            <section id="sell-section" class="manage-section">
+                <h2>Manage Sell Products</h2>
+                <table id="sell-product-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sell-product-list">
+                        <!-- Sell products will be dynamically populated here -->
                     </tbody>
                 </table>
             </section>
@@ -66,14 +89,128 @@
     </footer>
 
     <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-storage.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
-    <script>
-        // Firebase initialization and product fetching code
-        // (Same as the previous version)
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBC_QGtasFWeXqR6HWFExxHoG33VVj0nnA",
+            authDomain: "bitolx-eb2f5.firebaseapp.com",
+            projectId: "bitolx-eb2f5",
+            storageBucket: "bitolx-eb2f5.appspot.com",
+            messagingSenderId: "709510627062",
+            appId: "1:709510627062:web:d6790183c7154a5bd8b6d7",
+            measurementId: "G-HGQFGLTCTY",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchUsers() {
+            let noOfuser = await getDocs(collection(db,"user"));
+            noOfuser = noOfuser?.size;
+            document.querySelector("#total-users").textContent = noOfuser;
+            console.log(noOfuser);
+            let noOfproduct = await getDocs(collection(db,"sales"));
+            noOfproduct = noOfproduct?.size;
+            document.querySelector("#total-products").textContent = noOfproduct;
+            console.log(noOfuser);
+            let noOfsales = await getDocs(collection(db,"sales"));
+            noOfsales = noOfsales?.size;
+            document.querySelector("#total-sales").textContent = noOfsales;
+            console.log(noOfuser);
+        }
+
+        fetchUsers();
+
+        // Fetch Buy Products
+        async function fetchBuyProducts() {
+            const querySnapshot = await getDocs(collection(db, "buy"));
+            const productList = document.getElementById("buy-product-list");
+            productList.innerHTML = ""; // Clear previous entries
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+
+                // Create a row for each product
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${data.pname}</td>
+                    <td>$${data.price}</td>
+                    <td>${data.description}</td>
+                    <td><img src="${data.image || '/images/default-product.jpg'}" alt="${data.pname}" class="product-image"></td>
+                    <td>
+                        <button class="delete-btn" data-id="${doc.id}" data-type="buy">Delete</button>
+                    </td>
+                `;
+                productList.appendChild(row);
+            });
+
+            // Add event listeners for delete buttons
+            document.querySelectorAll(".delete-btn").forEach((button) => {
+                button.addEventListener("click", async (e) => {
+                    const id = e.target.dataset.id;
+                    const type = e.target.dataset.type;
+                    await deleteProduct(id, type);
+                });
+            });
+        }
+
+        // Fetch Sell Products
+        async function fetchSellProducts() {
+            const querySnapshot = await getDocs(collection(db, "sales"));
+            const productList = document.getElementById("sell-product-list");
+            productList.innerHTML = ""; // Clear previous entries
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+
+                // Create a row for each product
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${data.pname}</td>
+                    <td>$${data.price}</td>
+                    <td>${data.description}</td>
+                    <td><img src="${data.image || '/images/default-product.jpg'}" alt="${data.pname}" class="product-image"></td>
+                    <td>
+                        <button class="delete-btn" data-id="${doc.id}" data-type="sell">Delete</button>
+                    </td>
+                `;
+                productList.appendChild(row);
+            });
+
+            // Add event listeners for delete buttons
+            document.querySelectorAll(".delete-btn").forEach((button) => {
+                button.addEventListener("click", async (e) => {
+                    const id = e.target.dataset.id;
+                    const type = e.target.dataset.type;
+                    await deleteProduct(id, type);
+                });
+            });
+        }
+
+        // Delete Product
+        async function deleteProduct(id, type) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                try {
+                    await deleteDoc(doc(db, type, id));
+                    alert("Product deleted successfully!");
+                    if (type === "buy") await fetchBuyProducts();
+                    else if (type === "sell") await fetchSellProducts();
+                } catch (error) {
+                    console.error("Error deleting product: ", error);
+                    alert("Failed to delete product.");
+                }
+            }
+        }
+
+        // Load data on page load
+        window.onload = async () => {
+            await fetchBuyProducts();
+            await fetchSellProducts();
+        };
     </script>
 </body>
 

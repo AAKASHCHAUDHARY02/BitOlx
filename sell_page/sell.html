@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/sell_page/css/sell.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <header>
@@ -29,6 +31,23 @@
             <h2>Sell Your Product</h2>
             <p>Fill out the form below to list your product for sale.</p>
             <form id="sellForm">
+                <!-- Seller's Contact Details -->
+                <div class="form-group">
+                    <label for="seller-name">Your Name</label>
+                    <input type="text" id="seller-name" placeholder="Enter Your Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="seller-email">Your Email</label>
+                    <input type="email" id="seller-email" placeholder="Enter Your Email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="seller-phone">Your Phone Number</label>
+                    <input type="tel" id="seller-phone" placeholder="Enter Your Phone Number" pattern="[0-9]{10}" required>
+                </div>
+
+                <!-- Product Details -->
                 <div class="form-group">
                     <label for="product-name">Product Name</label>
                     <input type="text" id="product-name" placeholder="Enter Product Name" required>
@@ -60,7 +79,7 @@
                     <input type="file" id="product-image" accept="image/*">
                 </div>
 
-                <button type="submit" class="btn-sell">Submit</button>
+                <button type="submit" class="btn-sell" id="submit">Submit</button>
             </form>
         </div>
     </section>
@@ -70,5 +89,62 @@
         <p>&copy; 2024 BitOlx. All rights reserved.</p>
     </footer>
 
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBC_QGtasFWeXqR6HWFExxHoG33VVj0nnA",
+            authDomain: "bitolx-eb2f5.firebaseapp.com",
+            projectId: "bitolx-eb2f5",
+            storageBucket: "bitolx-eb2f5.appspot.com",
+            messagingSenderId: "709510627062",
+            appId: "1:709510627062:web:d6790183c7154a5bd8b6d7",
+            measurementId: "G-HGQFGLTCTY",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.querySelector("#submit").addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            // Collecting Form Data
+            const sellerName = document.querySelector("#seller-name").value;
+            const sellerEmail = document.querySelector("#seller-email").value;
+            const sellerPhone = document.querySelector("#seller-phone").value;
+            const pname = document.querySelector("#product-name").value;
+            const pcategory = document.querySelector("#product-category").value;
+            const price = document.querySelector("#product-price").value;
+            const description = document.querySelector("#product-description").value;
+            const image = document.querySelector("#product-image").value;
+
+            // Create Document Data
+            const docData = {
+                sellerName,
+                sellerEmail,
+                sellerPhone,
+                pname,
+                pcategory,
+                price,
+                description,
+                image,
+            };
+
+            console.log(docData);
+
+            // Add Document to Firebase
+            try {
+                await addDoc(collection(db, 'sales'), docData);
+                alert("Product successfully listed for sale!");
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Failed to list product. Please try again.");
+            }
+        });
+    </script>
 </body>
 </html>

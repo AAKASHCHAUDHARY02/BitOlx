@@ -47,19 +47,22 @@ document.getElementById("login-btn").addEventListener("click", async (e) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user; 
 
-        alert(user.email + " Logged In successfully!");
+        alert(user.email + " Logged In successfully!" +user.uid);
 
-        const docRef = doc(db, "users", user.uid); 
+        const docRef = doc(db, "user", user.uid); 
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
             const userData = docSnap.data();
             console.log("User Data:", userData);
+            if(userData?.admin) {
+                window.location.replace("../admin/das.html");
+            }
         } else {
+            window.location.replace("../user/user.html");
             console.log("No additional user data found in Firestore.");
         }
 
-        window.location.replace("../user/user.html");
 
     } catch (error) {
         const errorCode = error.code;

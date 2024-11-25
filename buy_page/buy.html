@@ -10,21 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <!-- Navbar Section -->
     <header>
         <nav>
             <div class="logo">BitOLX</div>
             <ul class="nav-links">
                 <li><a href="/index.html">Home</a></li>
-                <li><a href="buy.html">Buy</a></li>
+                <li><a href="buy.html" class="active">Buy</a></li>
                 <li><a href="../sell_page/sell.html">Sell</a></li>
-                <!-- <li><a href="#">Contact</a></li> -->
                 <li><a href="/login_page/login.html">Login</a></li>
             </ul>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
-            </div>
         </nav>
     </header>
 
@@ -34,8 +29,6 @@
         <div class="category-list">
             <a href="/all_categories/cat.html">All</a>
             <a href="/electronics/elec.html">Electronics</a>
-            <!-- <a href="#">Fashion</a> -->
-            <!-- <a href="#">Home Appliances</a> -->
             <a href="/vehicles/veh.html">Vehicles</a>
             <a href="/books/book.html">Books</a>
         </div>
@@ -45,38 +38,117 @@
     <section class="products">
         <h2>Available Products</h2>
         <div class="product-grid">
-            <div class="product-card">
-                <img src="/images/phone.jpg" alt="Product 1">
-                <h3>Smartphone</h3>
-                <p>50000</p>
-                <a href="#" class="product-btn">View Details</a>
-            </div>
-            <div class="product-card">
-                <img src="/images/macbook.jpg" alt="Product 2">
-                <h3>Laptop</h3>
-                <p>60000</p>
-                <a href="#" class="product-btn">View Details</a>
-            </div>
-            <div class="product-card">
-                <img src="/images/book.jpg" alt="Product 3">
-                <h3>Book</h3>
-                <p>300</p>
-                <a href="#" class="product-btn">View Details</a>
-            </div>
-            <div class="product-card">
-                <img src="/images/cycle.jpg" alt="Product 4">
-                <h3>Cycle</h3>
-                <p>4000</p>
-                <a href="#" class="product-btn">View Details</a>
-            </div>
-            <!-- Add more products as needed -->
+            <!-- Products will be dynamically loaded here -->
         </div>
     </section>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <img id="modal-image" src="" alt="Product Image" />
+            <h3 id="modal-name"></h3>
+            <p class="product-price" id="modal-price"></p>
+            <p id="modal-category"><span>Category:</span> </p>
+            <p id="modal-description"><span>Description:</span> </p>
+            <p id="modal-contact"><span>Contact:</span> </p>
+            <div class="modal-footer">
+                <a href="#" id="contact-seller">Contact Seller</a>
+                <a href="#" id="buy-now">Buy Now</a>
+            </div>
+        </div>
+    </div>
+    
 
     <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 BitOLX. All Rights Reserved.</p>
     </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "bitolx-eb2f5.firebaseapp.com",
+            projectId: "bitolx-eb2f5",
+            storageBucket: "bitolx-eb2f5.appspot.com",
+            messagingSenderId: "709510627062",
+            appId: "1:709510627062:web:d6790183c7154a5bd8b6d7",
+            measurementId: "G-HGQFGLTCTY",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch products from Firestore and display them
+        async function loadProducts() {
+            const productGrid = document.querySelector(".product-grid");
+            productGrid.innerHTML = "<p>Loading products...</p>";
+
+            try {
+                const querySnapshot = await getDocs(collection(db, 'sales'));
+                productGrid.innerHTML = ""; // Clear the loading message
+
+                if (querySnapshot.empty) {
+                    productGrid.innerHTML = "<p>No products available at the moment.</p>";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    // Create a product card
+                    const productCard = document.createElement("div");
+                    productCard.classList.add("product-card");
+
+                    productCard.innerHTML = `
+                        <img src="${data.image || '/images/default-product.jpg'}" alt="${data.pname}" class="product-image">
+                        <div class="product-info">
+                            <h3>${data.pname}</h3>
+                            <p>Price: $${data.price}</p>
+                            <a href="#" class="product-btn" data-id="${doc.id}">View Details</a>
+                        </div>
+                    `;
+
+                    productGrid.append(productCard);
+
+                    // Add event listener for "View Details" button
+                    productCard.querySelector(".product-btn").addEventListener("click", (e) => {
+                        e.preventDefault();
+                        showDetailsModal(data);
+                    });
+                });
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                productGrid.innerHTML = "<p>Failed to load products. Please try again later.</p>";
+            }
+        }
+
+        // Show Product Details Modal
+        function showDetailsModal(product) {
+            const modal = document.getElementById("product-modal");
+            modal.querySelector("#modal-image").src = product.image || '/images/default-product.jpg';
+            modal.querySelector("#modal-name").textContent = product.pname;
+            modal.querySelector("#modal-price").textContent = `Price: $${product.price}`;
+            modal.querySelector("#modal-category").textContent = `Category: ${product.pcategory}`;
+            modal.querySelector("#modal-description").textContent = `Description: ${product.description}`;
+            modal.querySelector("#modal-contact").textContent = `Contact: ${product.contact}`;
+
+            modal.classList.remove("hidden");
+        }
+
+        // Close Product Details Modal
+        document.getElementById("close-modal").addEventListener("click", () => {
+            document.getElementById("product-modal").classList.add("hidden");
+        });
+
+        // Load products on page load
+        window.addEventListener("DOMContentLoaded", loadProducts);
+    </script>
 
 </body>
 </html>

@@ -36,6 +36,59 @@
     </form>
 
     <script src="firebase.js" type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+      import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBC_QGtasFWeXqR6HWFExxHoG33VVj0nnA",
+        authDomain: "bitolx-eb2f5.firebaseapp.com",
+        projectId: "bitolx-eb2f5",
+        storageBucket: "bitolx-eb2f5.appspot.com",
+        messagingSenderId: "709510627062",
+        appId: "1:709510627062:web:d6790183c7154a5bd8b6d7",
+        measurementId: "G-HGQFGLTCTY",
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+    
+      // Login function
+      const login = async (event) => {
+        event.preventDefault(); // Prevent form submission reload
+    
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+    
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+    
+          // Get user data from Firestore
+          const userDoc = await getDoc(doc(db, 'user', user.uid));
+    
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.admin) {
+              window.location.href = "/admin.html"; // Redirect to admin dashboard
+            } else {
+            }
+          } else {
+            window.location.href = "/user.html"; // Redirect to user dashboard
+            console.error('No user data found in Firestore');
+          }
+        } catch (error) {
+          console.error('Error logging in:', error.message);
+        }
+      };
+    
+      // Attach the login function to the form
+      document.querySelector('#loginForm').addEventListener('submit', login);
     </script>
+    
+    
   </body>
 </html>
